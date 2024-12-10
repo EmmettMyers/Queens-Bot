@@ -9,5 +9,7 @@ How it works:
  4. View your solved board visualization
  5. Open Queens on your phone and copy the visualization
 
+<img src="example.png" style="width: 600px" />
+
 Tools used:
  - Python (numpy, matplotlib, scipy)
