@@ -1,14 +1,14 @@
 import numpy as np
 from PIL import Image
 from scipy.signal import find_peaks
-
-print()
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 # outputs the boards
 def print_array(array):
+    print()
     for row in array:
         print(row)
-    print()
 
 # load the image
 image_path = 'tests/test8.png'
@@ -115,5 +115,34 @@ board = [["." for _ in range(N)] for _ in range(N)]
 
 if solve(board):
     print_array(board)
+    print()
 else:
-    print("No solution found\n")
+    print("\nNo solution found\n")
+
+# visualize the board with colors
+def visualize_board(grid_colors, board):
+    fig, ax = plt.subplots(figsize=(8, 8))
+    border_width = 0.1
+    ax.add_patch(patches.Rectangle((-border_width, -border_width), N + 2 * border_width, N + 2 * border_width,
+                                    facecolor='black', edgecolor='black', zorder=0))
+    ax.set_xlim(-border_width, N + border_width)
+    ax.set_ylim(-border_width, N + border_width)
+    plt.gca().invert_yaxis()
+    # colored tiles
+    for r in range(N):
+        for c in range(N):
+            color = grid_colors[r][c]
+            rect = patches.Rectangle((c, r), 1, 1, facecolor=np.array(color) / 255, edgecolor='black')
+            ax.add_patch(rect)
+    # queens visuals
+    for r in range(N):
+        for c in range(N):
+            if board[r][c] == "Q":
+                queen_color = 'black' if np.mean(grid_colors[r][c]) > 127 else 'white'  # Contrast color
+                ax.text(c + 0.5, r + 0.5, "♕", color=queen_color,
+                        fontsize=28, ha='center', va='center', fontweight='bold')
+    ax.axis('off')
+    plt.show()
+
+# Visualize the result
+visualize_board(grid_colors, board)
