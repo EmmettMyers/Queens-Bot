@@ -11,7 +11,7 @@ def print_array(array):
     print()
 
 # load the image
-image_path = 'tests/test1.png'
+image_path = 'tests/test8.png'
 image = Image.open(image_path)
 
 # convert the image into a numpy array of RGB values
