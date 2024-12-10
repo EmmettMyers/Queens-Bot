@@ -9,7 +9,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Solve and visualize the queens on a colored grid.")
 parser.add_argument("screenshot_name", help="Base name of the screenshot without file extension.")
 args = parser.parse_args()
-image_path = f"boards/{args.screenshot_name}.png"
+image_path = f"tests/{args.screenshot_name}.png"
 
 # load the image
 image = Image.open(image_path)
@@ -117,17 +117,10 @@ def solve(board, row=0):
             regions_used.remove(regions[row][col])
     return False
 
-board = [["." for _ in range(N)] for _ in range(N)]
-
-if solve(board):
-    print_array(board)
-    print()
-else:
-    print("\nNo solution found\n")
-
 # visualize the board with colors
 def visualize_board(grid_colors, board):
     fig, ax = plt.subplots(figsize=(8, 8))
+    fig.canvas.manager.set_window_title("Linkedin Queens Solver")
     border_width = 0.1
     ax.add_patch(patches.Rectangle((-border_width, -border_width), N + 2 * border_width, N + 2 * border_width,
                                     facecolor='black', edgecolor='black', zorder=0))
@@ -150,5 +143,12 @@ def visualize_board(grid_colors, board):
     ax.axis('off')
     plt.show()
 
-# Visualize the result
-visualize_board(grid_colors, board)
+board = [["." for _ in range(N)] for _ in range(N)]
+
+if solve(board):
+    # Visualize the result
+    print_array(board)
+    print()
+    visualize_board(grid_colors, board)
+else:
+    print("\nNo solution found\n")
