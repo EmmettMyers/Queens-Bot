@@ -3,16 +3,22 @@ from PIL import Image
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import argparse
+
+# parse command-line arguments
+parser = argparse.ArgumentParser(description="Solve and visualize the queens on a colored grid.")
+parser.add_argument("screenshot_name", help="Base name of the screenshot without file extension.")
+args = parser.parse_args()
+image_path = f"boards/{args.screenshot_name}.png"
+
+# load the image
+image = Image.open(image_path)
 
 # outputs the boards
 def print_array(array):
     print()
     for row in array:
         print(row)
-
-# load the image
-image_path = 'tests/test8.png'
-image = Image.open(image_path)
 
 # convert the image into a numpy array of RGB values
 image_array = np.array(image)
