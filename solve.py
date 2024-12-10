@@ -9,7 +9,7 @@ import argparse
 parser = argparse.ArgumentParser(description="Solve and visualize the queens on a colored grid.")
 parser.add_argument("screenshot_name", help="Base name of the screenshot without file extension.")
 args = parser.parse_args()
-image_path = f"tests/{args.screenshot_name}.png"
+image_path = f"boards/{args.screenshot_name}.png"
 
 # load the image
 image = Image.open(image_path)
