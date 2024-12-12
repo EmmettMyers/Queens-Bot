@@ -16,6 +16,7 @@ def print_array(array):
     print()
     for row in array:
         print(row)
+    print()
 
 def detect_high_peaks(data, threshold=PEAK_THRESHOLD, min_distance=MIN_PEAK_DISTANCE):
     """Detect peaks in 1D data with normalization."""
