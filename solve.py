@@ -95,7 +95,6 @@ def solve(board, row, columns_used, regions_used, regions):
             board[row][col] = "."
             columns_used[col] = False
             regions_used.remove(regions[row][col])
-
     return False
 
 # Main execution.
