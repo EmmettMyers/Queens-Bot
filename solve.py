@@ -39,9 +39,9 @@ def detect_grid_size(image_array):
 
 def get_cell_color(image_array, row, col, cell_height, cell_width):
     """Extract the color of a specific cell."""
-    upper_fourth_y = (row * cell_height) + (cell_height // 3)
-    upper_fourth_x = (col * cell_width) + (cell_width // 3)
-    return tuple(image_array[upper_fourth_y, upper_fourth_x])
+    upper_third_y = (row * cell_height) + (cell_height // 3)
+    upper_third_x = (col * cell_width) + (cell_width // 3)
+    return tuple(image_array[upper_third_y, upper_third_x])
 
 # Solver Functions
 def is_valid(board, row, col, columns_used, regions_used, regions):
