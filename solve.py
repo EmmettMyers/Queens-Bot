@@ -25,7 +25,7 @@ def print_array(array):
 
 # Visualize the board with colors and queens.
 def visualize_board(grid_colors, board):
-    N = len(board)
+    global N
     fig, ax = plt.subplots(figsize=(8, 8))
     fig.canvas.manager.set_window_title("LinkedIn Queens Solver")
     ax.add_patch(patches.Rectangle((-BORDER_WIDTH, -BORDER_WIDTH), N + 2 * BORDER_WIDTH, N + 2 * BORDER_WIDTH,
@@ -67,7 +67,8 @@ def detect_grid_size(image_array):
     gray_image = np.mean(image_array, axis=2).astype(np.uint8)
     row_sums = np.sum(255 - gray_image, axis=1)
     row_peaks = detect_high_peaks(row_sums, threshold=GRID_THRESHOLD, min_distance=10)
-    return len(row_peaks) + 1
+    global N
+    N = len(row_peaks) + 1
 
 # Extract the color of a specific cell.
 def get_cell_color(image_array, row, col, cell_height, cell_width):
@@ -77,6 +78,7 @@ def get_cell_color(image_array, row, col, cell_height, cell_width):
 
 # Check if a queen can be placed in a given cell.
 def is_valid(board, regions, row, col, columns_used, regions_used):
+    global N  # Declare N as global
     if columns_used[col] or regions[row][col] in regions_used:
         return False
     # No queens around current cell
@@ -85,7 +87,7 @@ def is_valid(board, regions, row, col, columns_used, regions_used):
             if dr == 0 and dc == 0:
                 continue
             r, c = row + dr, col + dc
-            if 0 <= r < len(board) and 0 <= c < len(board) and board[r][c] == "Q":
+            if 0 <= r < N and 0 <= c < N and board[r][c] == "Q":
                 return False
     return True
 
@@ -93,9 +95,10 @@ def is_valid(board, regions, row, col, columns_used, regions_used):
 
 # Solve the N-Queens problem using backtracking.
 def solve_backtracking(board, regions, row, columns_used, regions_used):
-    if row == len(board):
+    global N  # Declare N as global
+    if row == N:
         return True
-    for col in range(len(board)):
+    for col in range(N):
         if is_valid(board, regions, row, col, columns_used, regions_used):
             board[row][col] = "Q"
             columns_used[col] = True
@@ -110,41 +113,41 @@ def solve_backtracking(board, regions, row, columns_used, regions_used):
 
 # Solve the N-Queens problem using integer linear programming.
 def solve_ilp(board, regions):
-    n = len(board)
+    global N  # Declare N as global
     model = cp_model.CpModel()
-    x = [[model.NewBoolVar(f"x[{i},{j}]") for j in range(n)] for i in range(n)]
+    x = [[model.NewBoolVar(f"x[{i},{j}]") for j in range(N)] for i in range(N)]
 
     # One queen per row
-    for i in range(n):
-        model.Add(sum(x[i][j] for j in range(n)) == 1)
+    for i in range(N):
+        model.Add(sum(x[i][j] for j in range(N)) == 1)
     # One queen per column
-    for j in range(n):
-        model.Add(sum(x[i][j] for i in range(n)) == 1)
+    for j in range(N):
+        model.Add(sum(x[i][j] for i in range(N)) == 1)
 
     # No queens can be one block away from each other
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             if i > 0:
                 model.AddImplication(x[i][j], x[i - 1][j].Not())
-            if i < n - 1:
+            if i < N - 1:
                 model.AddImplication(x[i][j], x[i + 1][j].Not())
             if j > 0:
                 model.AddImplication(x[i][j], x[i][j - 1].Not())
-            if j < n - 1:
+            if j < N - 1:
                 model.AddImplication(x[i][j], x[i][j + 1].Not())
             if i > 0 and j > 0:
                 model.AddImplication(x[i][j], x[i - 1][j - 1].Not())
-            if i > 0 and j < n - 1:
+            if i > 0 and j < N - 1:
                 model.AddImplication(x[i][j], x[i - 1][j + 1].Not())
-            if i < n - 1 and j > 0:
+            if i < N - 1 and j > 0:
                 model.AddImplication(x[i][j], x[i + 1][j - 1].Not())
-            if i < n - 1 and j < n - 1:
+            if i < N - 1 and j < N - 1:
                 model.AddImplication(x[i][j], x[i + 1][j + 1].Not())
 
     # Only one queen per region
     region_dict = {}
-    for i in range(n):
-        for j in range(n):
+    for i in range(N):
+        for j in range(N):
             region = regions[i][j]
             if region not in region_dict:
                 region_dict[region] = []
@@ -155,8 +158,8 @@ def solve_ilp(board, regions):
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
     if status == cp_model.OPTIMAL:
-        for i in range(n):
-            for j in range(n):
+        for i in range(N):
+            for j in range(N):
                 if solver.Value(x[i][j]) == 1:
                     board[i][j] = "Q"
         return True
@@ -177,7 +180,7 @@ def main():
     image_array = np.array(image)
 
     # Detect grid size
-    N = detect_grid_size(image_array)
+    detect_grid_size(image_array)
     height, width, _ = image_array.shape
     cell_height, cell_width = height // N, width // N
 
