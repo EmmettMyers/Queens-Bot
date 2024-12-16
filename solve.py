@@ -78,7 +78,7 @@ def get_cell_color(image_array, row, col, cell_height, cell_width):
 
 # Check if a queen can be placed in a given cell.
 def is_valid(board, regions, row, col, columns_used, regions_used):
-    global N  # Declare N as global
+    global N
     if columns_used[col] or regions[row][col] in regions_used:
         return False
     # No queens around current cell
@@ -95,7 +95,7 @@ def is_valid(board, regions, row, col, columns_used, regions_used):
 
 # Solve the N-Queens problem using backtracking.
 def solve_backtracking(board, regions, row, columns_used, regions_used):
-    global N  # Declare N as global
+    global N
     if row == N:
         return True
     for col in range(N):
@@ -113,7 +113,7 @@ def solve_backtracking(board, regions, row, columns_used, regions_used):
 
 # Solve the N-Queens problem using integer linear programming.
 def solve_ilp(board, regions):
-    global N  # Declare N as global
+    global N
     model = cp_model.CpModel()
     x = [[model.NewBoolVar(f"x[{i},{j}]") for j in range(N)] for i in range(N)]
 
