@@ -13,4 +13,4 @@ How it works:
 <img src="example.png" style="width: 600px" />
 
 Tools used:
- - Python (numpy, matplotlib, scipy)
+ - Python (numpy, or-tools, scipy, matplotlib)
