@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import argparse
 from ortools.sat.python import cp_model
+import time
 
 """ Constants """
 
@@ -21,7 +22,6 @@ def print_array(array):
     print()
     for row in array:
         print(row)
-    print()
 
 # Visualize the board with colors and queens.
 def visualize_board(grid_colors, board):
@@ -191,7 +191,6 @@ def main():
     # Group colors into regions
     groups = {}
     regions = [[0 for _ in range(N)] for _ in range(N)]
-
     for r, row in enumerate(grid_colors):
         for c, color in enumerate(row):
             for group_color in groups:
@@ -201,16 +200,19 @@ def main():
             else:
                 groups[color] = len(groups) + 1
                 regions[r][c] = groups[color]
-
     print_array(regions)
 
     # Solve the N-Queens problem
+    start_time = time.time()
     board = [["." for _ in range(N)] for _ in range(N)]
     algorithm = args.algorithm
     solved = solve_ilp(board, regions) if algorithm == "ilp" else solve_backtracking(board, regions, 0, [False] * N, set())
     if solved:
         print_array(board)
         visualize_board(grid_colors, board)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"\nTime taken to solve problem: {elapsed_time:.4f} seconds\n")
     else:
         print("\nNo solution found\n")
 
