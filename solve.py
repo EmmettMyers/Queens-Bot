@@ -112,7 +112,6 @@ def solve_backtracking(board, regions, row, columns_used, regions_used):
 def solve_ilp(board, regions):
     n = len(board)
     model = cp_model.CpModel()
-    # Queen = 1, Non-queen = 0
     x = [[model.NewBoolVar(f"x[{i},{j}]") for j in range(n)] for i in range(n)]
 
     # One queen per row
@@ -122,24 +121,24 @@ def solve_ilp(board, regions):
     for j in range(n):
         model.Add(sum(x[i][j] for i in range(n)) == 1)
 
-    # No queens can be one block away
+    # No queens can be one block away from each other
     for i in range(n):
         for j in range(n):
-            if i > 0:  # Top neighbor
+            if i > 0:
                 model.AddImplication(x[i][j], x[i - 1][j].Not())
-            if i < n - 1:  # Bottom neighbor
+            if i < n - 1:
                 model.AddImplication(x[i][j], x[i + 1][j].Not())
-            if j > 0:  # Left neighbor
+            if j > 0:
                 model.AddImplication(x[i][j], x[i][j - 1].Not())
-            if j < n - 1:  # Right neighbor
+            if j < n - 1:
                 model.AddImplication(x[i][j], x[i][j + 1].Not())
-            if i > 0 and j > 0:  # Top-left diagonal
+            if i > 0 and j > 0:
                 model.AddImplication(x[i][j], x[i - 1][j - 1].Not())
-            if i > 0 and j < n - 1:  # Top-right diagonal
+            if i > 0 and j < n - 1:
                 model.AddImplication(x[i][j], x[i - 1][j + 1].Not())
-            if i < n - 1 and j > 0:  # Bottom-left diagonal
+            if i < n - 1 and j > 0:
                 model.AddImplication(x[i][j], x[i + 1][j - 1].Not())
-            if i < n - 1 and j < n - 1:  # Bottom-right diagonal
+            if i < n - 1 and j < n - 1:
                 model.AddImplication(x[i][j], x[i + 1][j + 1].Not())
 
     # Only one queen per region
@@ -161,8 +160,7 @@ def solve_ilp(board, regions):
                 if solver.Value(x[i][j]) == 1:
                     board[i][j] = "Q"
         return True
-    else:
-        return False
+    return False
 
 """ Main function """
 
