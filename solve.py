@@ -207,12 +207,12 @@ def main():
     board = [["." for _ in range(N)] for _ in range(N)]
     algorithm = args.algorithm
     solved = solve_ilp(board, regions) if algorithm == "ilp" else solve_backtracking(board, regions, 0, [False] * N, set())
+    end_time = time.time()
     if solved:
         print_array(board)
         visualize_board(grid_colors, board)
-        end_time = time.time()
         elapsed_time = end_time - start_time
-        print(f"\nTime taken to solve problem: {elapsed_time:.4f} seconds\n")
+        print(f"\nTime taken to solve problem: {elapsed_time:.6f} seconds\n")
     else:
         print("\nNo solution found\n")
 
