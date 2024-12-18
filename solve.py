@@ -212,7 +212,7 @@ def main():
         print_array(board)
         visualize_board(grid_colors, board)
         elapsed_time = end_time - start_time
-        print(f"\nTime taken to solve problem: {elapsed_time:.6f} seconds\n")
+        print(f"\nAlgorithmic time taken: {elapsed_time:.6f} seconds\n")
     else:
         print("\nNo solution found\n")
 
