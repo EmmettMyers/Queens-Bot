@@ -1,5 +1,7 @@
 # Queens Bot
 
+<i>Created: Winter 2024 (College Junior)</i>
+
 Solves the Linkedin Queens game in ~1 second using image detection and algorithms!<br/>
 It can use either backtracking or integer linear programming to solve a given board.
 
